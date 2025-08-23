@@ -11,16 +11,10 @@ return {
 	    api.config.mappings.default_on_attach(bufnr) 
 	    pcall(vim.keymap.del, "n", "o", { buffer = bufnr }) 
 		local function open_or_open_pdf() 
-	      local ok_lib, lib = pcall(require, "nvim-tree.lib")
-	      if not ok_lib or not lib then return end
-		  local ok_node, node = pcall(lib.get_node_at_cursor)
-		  if not ok_node or not node then return end
-
-		  local path = node.absolute_path or node.link_to or node.name
-		  local is_dir = (node.type == "directory") or (node.nodes ~= nil)
-		  if path and not is_dir and path:lower():match("%.pdf$") then 
-		    vim.notify("open pdf: " .. path)
-			vim.fn.jobstart({ "open", path }, { detach = true }) 
+		  local node = require("nvim-tree.api").tree.get_node_under_cursor()
+		  local path = node.absolute_path
+		  if path:lower():match("%.pdf$") then 
+			vim.fn.jobstart({ "open", "-a", "Preview", path }, { detach = true }) 
 		  else 
 		    api.node.open.edit() 
 		  end 
