@@ -34,9 +34,10 @@ vim.cmd [[
   "highlight LineNr guibg=NONE
   "highlight SignColumn guibg=NONE
   highlight VertSplit guibg=NONE
+  highlight FloatBorder guifg=#a9b1d6 guibg=NONE
 ]]
 
--- for bufferline
+-- for nvimtree 
 vim.keymap.set("n", "<C-h>", "<cmd>bprev<CR>")
 vim.keymap.set("n", "<C-l>", "<cmd>bnext<CR>")
 
@@ -50,6 +51,11 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("i", "aaa", "cout << ans << endl;<ESC>", { noremap = true, buffer = true })
   end,
 })
+-- off cmp
+local cmp = require'cmp'
+cmp.setup.filetype('cpp', {
+  enabled = false
+})
 
 -- for markdown --
 vim.api.nvim_create_autocmd("FileType", {
@@ -61,13 +67,15 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.foldlevel = 99  
   end,
 })
-
 vim.api.nvim_create_autocmd("BufReadPost", {
   pattern = "*.md",
   callback = function()
     vim.cmd("normal! zM")  
   end,
 })
+-- preview 
+vim.g.vim_markdown_conceal = 0
+vim.g.vim_markdown_math = 1
 
 -- for spell checker (only in markdown) --
 vim.api.nvim_create_autocmd("FileType", {
@@ -86,24 +94,12 @@ require("lspconfig").pyright.setup{
     }
   }
 }
+-- for diagnostic
+vim.keymap.set('n', '<leader>d', function()
+  vim.diagnostic.open_float(nil, { focus = true, border = "rounded"})
+end, { desc = 'Show diagnostics under cursor' })
 
--- for markdown preview
-vim.g.vim_markdown_conceal = 0
-vim.g.vim_markdown_math = 1
-
--- for opening images
--- vim.keymap.set("n", "<leader>o", function()
---   local line = vim.fn.getline(".")
---   local path = line:match("%!%[.-%]%((.-)%)")
---   if not path then return end
---
---   local base_dir = vim.fn.expand("%:p:h")
---   local abs_path = vim.fn.fnamemodify(base_dir .. "/" .. path, ":p")
---
---   if vim.fn.filereadable(abs_path) == 0 then return end
---
---   vim.fn.jobstart({ "open", "-a", "Google Chrome", abs_path }, { detach = true })
--- end)
+-- open a screenshot in quicklook 
 vim.keymap.set("n", "<leader>o", function()
   local line = vim.fn.getline(".")
   local path = line:match("%!%[.-%]%((.-)%)")
@@ -116,7 +112,3 @@ vim.keymap.set("n", "<leader>o", function()
   vim.fn.jobstart({ "qlmanage", "-p", abs_path }, { detach = true })
 end)
 
--- for diagnostic
-vim.keymap.set('n', '<leader>d', function()
-  vim.diagnostic.open_float(nil, { focus = true })
-end, { desc = 'Show diagnostics under cursor' })
