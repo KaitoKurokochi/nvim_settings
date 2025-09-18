@@ -4,12 +4,12 @@ return {
 	  event = "VeryLazy",
 	  opts = {
 		default = {
-		  dir_path = os.getenv("HOME") .. "/Documents/imgs", 
+		  dir_path = "/Users/kurokochikaito/Documents/imgs",
 		  file_name = function()
 			return os.date("%Y-%m-%d-%H-%M-%S")
 		  end,
 		  extension = "png",
-		  relative_to_current_file = false,
+		  use_absolute_path = true,
 		  prompt_for_file_name = false,
 		},
 	  },
