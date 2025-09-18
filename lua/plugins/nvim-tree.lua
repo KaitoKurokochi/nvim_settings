@@ -30,6 +30,7 @@ return {
         filters = {
           dotfiles = false,
           git_ignored = false,
+		  custom = { "DS_Store" }
         },
 	    on_attach = my_on_attach, 
       })
