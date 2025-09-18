@@ -102,13 +102,14 @@ end, { desc = 'Show diagnostics under cursor' })
 -- open a screenshot in quicklook 
 vim.keymap.set("n", "<leader>o", function()
   local line = vim.fn.getline(".")
-  local path = line:match("%!%[.-%]%((.-)%)")
+  local path = line:match("%!%[.-%]%((/.+)%)")
   if not path then return end
-
-  local base_dir = vim.fn.expand("%:p:h")
-  local abs_path = vim.fn.fnamemodify(base_dir .. "/" .. path, ":p")
-  if vim.fn.filereadable(abs_path) == 0 then return end
-
-  vim.fn.jobstart({ "qlmanage", "-p", abs_path }, { detach = true })
+  local abs_path = vim.fs.normalize(path)
+  if vim.fn.filereadable(abs_path) == 0 then
+    vim.notify("File not found: " .. abs_path, vim.log.levels.WARN)
+    return
+  end
+  vim.ui.open(abs_path)
+  -- vim.fn.jobstart({ "qlmanage", "-p", abs_path }, { detach = true })
 end)
 
