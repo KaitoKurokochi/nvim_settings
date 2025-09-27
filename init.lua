@@ -85,15 +85,6 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- for python
-vim.g.python3_host_prog = "/Users/kurokochikaito/myenv/bin/python"
-require("lspconfig").pyright.setup{
-  settings = {
-    python = {
-      pythonPath = "/Users/kurokochikaito/myenv/bin/python"
-    }
-  }
-}
 -- for diagnostic
 vim.keymap.set('n', '<leader>d', function()
   vim.diagnostic.open_float(nil, { focus = true, border = "rounded"})
