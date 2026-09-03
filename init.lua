@@ -1,3 +1,8 @@
+vim.opt.encoding = "utf-8"
+vim.opt.fileencodings = "utf-8"
+vim.opt.fileformats = "unix,dos,mac"
+vim.cmd("language en_US.UTF-8")
+
 vim.opt.number = true
 vim.cmd("highlight LineNr ctermfg=DarkGray")
 vim.opt.tabstop = 4
